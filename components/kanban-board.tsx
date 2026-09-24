@@ -6,7 +6,6 @@ import {
   Calendar,
   CheckCircle2,
   Mic,
-  MoreHorizontal,
   MoreVertical,
   Trash2,
   XCircle,
@@ -95,14 +94,14 @@ function DroppableColumn({
   const sortedJobs =
     column.jobApplications?.sort((a, b) => a.order - b.order) || [];
   return (
-    <Card className="min-w-[300px] flex-shrink-0 shadow-md p-0">
+    <Card className="w-full shadow-md p-0 flex flex-col min-w-0">
       <CardHeader
-        className={`${config.color} text-white rounded-t-lg pb-3 pt-3`}
+        className={`${config.color} text-white rounded-t-lg pb-3 pt-3 px-3.5`}
       >
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             {config.icon}
-            <CardTitle className="text-white text-base font-semibold">
+            <CardTitle className="text-white text-base font-semibold truncate">
               {column.name}
             </CardTitle>
           </div>
@@ -111,7 +110,7 @@ function DroppableColumn({
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-6 w-6 text-white hover:bg-white/20"
+                className="h-6 w-6 text-white hover:bg-white/20 shrink-0"
               >
                 <MoreVertical className="h-4 w-4" />
               </Button>
@@ -128,7 +127,7 @@ function DroppableColumn({
 
       <CardContent
         ref={setNodeRef}
-        className={`space-y-2 pt-4 bg-gray-50/50 min-h-[400px] rounded-b-lg ${
+        className={`flex-1 space-y-2 p-3 bg-gray-50/50 min-h-[450px] rounded-b-lg ${
           isOver ? "ring-2 ring-blue-500" : ""
         }`}
       >
@@ -312,8 +311,8 @@ export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="space-y-4">
-        <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-start w-full">
           {sortedColumns.map((col, key) => {
             const config = COLUMN_CONFIG[key] || {
               color: "bg-gray-500",
@@ -334,7 +333,7 @@ export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
 
       <DragOverlay>
         {activeJob ? (
-          <div className="opacity-50">
+          <div className="opacity-60 w-[260px]">
             <JobApplicationCard job={activeJob} columns={sortedColumns} />
           </div>
         ) : null}
