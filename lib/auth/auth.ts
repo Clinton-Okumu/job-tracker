@@ -13,6 +13,18 @@ export const auth = betterAuth({
   database: mongodbAdapter(db, {
     client,
   }),
+  secret: process.env.BETTER_AUTH_SECRET,
+  baseURL:
+    process.env.BETTER_AUTH_URL ||
+    process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined),
+  trustedOrigins: [
+    "http://localhost:3000",
+    process.env.BETTER_AUTH_URL || "",
+    process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "",
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "",
+    "https://*.vercel.app",
+  ].filter(Boolean),
   session: {
     cookieCache: {
       enabled: true,
@@ -27,7 +39,11 @@ export const auth = betterAuth({
       create: {
         after: async (user) => {
           if (user.id) {
-            await initializeUserBoard(user.id);
+            try {
+              await initializeUserBoard(user.id);
+            } catch (err) {
+              console.error("Failed to initialize user board on signup:", err);
+            }
           }
         },
       },
